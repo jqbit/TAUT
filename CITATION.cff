@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use TAUT in research, benchmarks, or production deployments, please cite it as below."
+title: "TAUT — Terse Agent Utterance Tuning"
+abstract: "A one-file system prompt that compresses AI coding-agent prose output by 80% on average across 8 production agent CLIs (Claude Code, OpenAI Codex, Google Gemini, Factory Droid, Cursor, Pi, Hermes, OpenClaw) without persona collapse, character roleplay, or quality regression. Inspired by caveman (Brussee, 2026); diverges by replacing the caveman persona with a senior-engineer register."
+type: software
+authors:
+  - alias: jqbit
+    affiliation: Independent
+url: "https://github.com/jqbit/TAUT"
+repository-code: "https://github.com/jqbit/TAUT"
+license: MIT
+version: "0.13"
+date-released: "2026-04-16"
+keywords:
+  - prompt-engineering
+  - llm
+  - ai-agents
+  - system-prompt
+  - prompt-optimization
+  - llmops
+  - agentic-ai
+  - token-reduction
+  - output-compression
+  - claude-code
+  - openai-codex
+  - google-gemini
+  - cursor-agent
+references:
+  - type: software
+    title: "caveman: A maximally token-efficient agent communication mode"
+    authors:
+      - family-names: Brussee
+        given-names: Julius
+    url: "https://github.com/JuliusBrussee/caveman"
+    year: 2026

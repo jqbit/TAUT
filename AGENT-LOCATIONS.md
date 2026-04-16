@@ -17,97 +17,68 @@ Where to drop `TAUT.md` for each of the 8 supported coding-agent CLIs.
 
 For agents 1–6 the file is just the TAUT prompt by itself. For agents 7–8 the TAUT block is appended after the agent's pre-existing baseline persona/contract, separated by a `---` divider and a blank line.
 
-## One-shot deploy script
+## ⚡ Fastest install — pick your agent, run one line
 
-Drop the script below next to `TAUT.md` and run it once. Idempotent — re-running does not duplicate the appended block on openclaw / hermes.
+Each command below downloads `TAUT.md` straight from GitHub and writes it to the right path. No clone. No script. Just curl.
+
+### Single-agent installs (just the one you use)
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-SRC="$(dirname "$0")/TAUT.md"
-[ -f "$SRC" ] || { echo "TAUT.md not found next to this script"; exit 1; }
+# Claude Code
+mkdir -p ~/.claude && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/.claude/CLAUDE.md
 
-# 1. Six full-overwrite targets
-for dest in \
-  "$HOME/.claude/CLAUDE.md" \
-  "$HOME/.codex/AGENTS.md" \
-  "$HOME/.gemini/GEMINI.md" \
-  "$HOME/.factory/AGENTS.md" \
-  "$HOME/.pi/agent/AGENTS.md" \
-  "$HOME/AGENTS.md"; do
-  mkdir -p "$(dirname "$dest")"
-  cp "$SRC" "$dest"
-  echo "wrote $dest"
-done
+# OpenAI Codex
+mkdir -p ~/.codex && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/.codex/AGENTS.md
 
-# 2. Two surgical-append targets — preserve existing prefix, swap the TAUT block
-for dest in \
-  "$HOME/.openclaw/workspace/AGENTS.md" \
-  "$HOME/.hermes/SOUL.md"; do
-  mkdir -p "$(dirname "$dest")"
-  if [ ! -f "$dest" ]; then
-    cp "$SRC" "$dest"
-    echo "created $dest"
-    continue
-  fi
-  python3 - <<PY
-from pathlib import Path
-import re
-dest = Path("$dest")
-src  = Path("$SRC").read_text()
-text = dest.read_text()
-m = re.search(r"\n*---\n+# TAUT — Terse Agent Communication Mode.*$", text, re.S)
-new = (text[:m.start()].rstrip() if m else text.rstrip()) + "\n\n---\n\n" + src
-dest.write_text(new)
-PY
-  echo "appended TAUT block in $dest"
-done
+# Google Gemini
+mkdir -p ~/.gemini && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/.gemini/GEMINI.md
 
-# 3. Verify
-echo "---"
-echo "verification (every file should print ✓):"
-for p in \
-  "$HOME/.claude/CLAUDE.md" \
-  "$HOME/.codex/AGENTS.md" \
-  "$HOME/.gemini/GEMINI.md" \
-  "$HOME/.factory/AGENTS.md" \
-  "$HOME/.pi/agent/AGENTS.md" \
-  "$HOME/.openclaw/workspace/AGENTS.md" \
-  "$HOME/.hermes/SOUL.md" \
-  "$HOME/AGENTS.md"; do
-  if grep -q "Terse Agent Communication Mode" "$p" 2>/dev/null; then
-    echo "  ✓ $p"
-  else
-    echo "  ✗ $p (TAUT marker missing)"
-  fi
+# Factory Droid
+mkdir -p ~/.factory && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/.factory/AGENTS.md
+
+# Pi Coding Agent
+mkdir -p ~/.pi/agent && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/.pi/agent/AGENTS.md
+
+# Cursor CLI
+curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/AGENTS.md
+```
+
+### All-six-overwrite-agents at once
+
+```bash
+TAUT_URL=https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md
+for d in ~/.claude/CLAUDE.md ~/.codex/AGENTS.md ~/.gemini/GEMINI.md ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md ~/AGENTS.md; do
+  mkdir -p "$(dirname "$d")" && curl -fsSL "$TAUT_URL" -o "$d"
 done
 ```
 
-Save the block above as `deploy.sh`, `chmod +x deploy.sh`, then run `./deploy.sh`.
+### Append-mode agents (openclaw + hermes)
 
-## Manual one-by-one (if you prefer)
+These two agents already have a system prompt you want to keep (openclaw's session contract, hermes's persona). You append TAUT after it, separated by a `---` divider. Easiest manual approach: open the file in your editor, scroll to the bottom, paste a `---` blank-line block, then paste the contents of `TAUT.md`.
 
 ```bash
-# Full-overwrite targets
-cp TAUT.md ~/.claude/CLAUDE.md
-cp TAUT.md ~/.codex/AGENTS.md
-cp TAUT.md ~/.gemini/GEMINI.md
-cp TAUT.md ~/.factory/AGENTS.md
-cp TAUT.md ~/.pi/agent/AGENTS.md
-cp TAUT.md ~/AGENTS.md          # cursor-agent walks cwd up to home and finds this
+# OpenClaw
+${EDITOR:-nano} ~/.openclaw/workspace/AGENTS.md
+# Hermes
+${EDITOR:-nano} ~/.hermes/SOUL.md
+```
 
-# Surgical-append targets — open each file in your editor, scroll to bottom,
-# add a "---" line, blank line, then paste TAUT.md content
-${EDITOR:-vim} ~/.openclaw/workspace/AGENTS.md
-${EDITOR:-vim} ~/.hermes/SOUL.md
+If you want it pasted automatically, this one-liner appends `TAUT.md` to a file with the divider, idempotently (re-running won't duplicate):
+
+```bash
+TAUT_URL=https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md
+TARGET=~/.hermes/SOUL.md   # or ~/.openclaw/workspace/AGENTS.md
+mkdir -p "$(dirname "$TARGET")" && touch "$TARGET"
+grep -q "TAUT — Terse Agent Communication Mode" "$TARGET" || \
+  { printf '\n\n---\n\n' >> "$TARGET" && curl -fsSL "$TAUT_URL" >> "$TARGET"; }
 ```
 
 ## Per-agent notes worth knowing
 
 - **claude / codex / gemini / droid / pi** — the TAUT marker appears at column 1 of the file. These agents read their global instruction file at session start and apply it to every turn.
 - **cursor-agent** — its CLI walks the current working directory upward looking for `AGENTS.md`. Putting the file at `~/AGENTS.md` means any cwd under your home picks it up. Some agents that *also* walk the cwd tree (droid, pi) will encounter `~/AGENTS.md` in addition to their own global slot — this is harmless duplicate loading, ~2 KB of extra cached input.
-- **openclaw** — its built-in `~/.openclaw/workspace/AGENTS.md` carries the agent's session-startup contract (memory protocols, red lines, heartbeats). The deploy script preserves that prefix and appends the TAUT block after a `---` divider, exactly where openclaw's own "Make It Yours" section invites local conventions.
-- **hermes** — `~/.hermes/SOUL.md` carries Nous Research's default persona text. The deploy script preserves that prefix and appends the TAUT block after a `---` divider. Note: hermes's CLI binary forcibly emits diff views and `session_id:` trailers on tool-write tasks; this is harness-level layout that TAUT cannot suppress (see `EVOLUTION.md` §7 for the full write-up).
+- **openclaw** — its built-in `~/.openclaw/workspace/AGENTS.md` carries the agent's session-startup contract (memory protocols, red lines, heartbeats). The append-mode install preserves that prefix and adds the TAUT block after a `---` divider, exactly where openclaw's own "Make It Yours" section invites local conventions.
+- **hermes** — `~/.hermes/SOUL.md` carries Nous Research's default persona text. The append-mode install preserves that prefix and adds the TAUT block after a `---` divider. Note: hermes's CLI binary forcibly emits diff views and `session_id:` trailers on tool-write tasks; this is harness-level layout that TAUT cannot suppress (see [`EVOLUTION.md`](./EVOLUTION.md) §8 for the full write-up).
 
 ## Verification command
 
