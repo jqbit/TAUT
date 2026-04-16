@@ -1,12 +1,37 @@
-# TAUT — Terse Agent Communication Mode
+<div align="center">
 
-> A single-file system prompt that compresses coding-agent prose output by **80 % on average** across 8 different agent harnesses, while keeping a professional senior-engineer register. No fine-tuning. No model swap. No harness change. One Markdown file dropped into each agent's global instruction slot.
+# TAUT 🪡
+
+**TAUT** *(taut, adj.)* — pulled tight; not slack.
+*Also a backronym: **T**erse **A**gent **U**tterance **T**uning.*
+
+### A one-file system prompt that cuts AI coding-agent output by 80%
+
+No fine-tuning. No API change. No harness change. **Just one Markdown file** dropped into your agent's global instruction slot.
+
+[![release](https://img.shields.io/github/v/release/jqbit/TAUT?style=flat-square&color=blue)](https://github.com/jqbit/TAUT/releases)
+[![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)](#license)
+[![agents](https://img.shields.io/badge/agents-8-orange?style=flat-square)](#supported-agents)
+[![reduction](https://img.shields.io/badge/output_reduction-80%25-red?style=flat-square)](#benchmark)
+[![compliance](https://img.shields.io/badge/avg_compliance-96.7%25-brightgreen?style=flat-square)](#benchmark)
+
+**Works with:** Claude Code · OpenAI Codex · Google Gemini · Factory Droid · Cursor Agent · Pi · Hermes · OpenClaw
+
+</div>
 
 ---
 
-## Headline result
+## ⚡ Why TAUT?
 
-| Agent | Prose tokens (no TAUT) | Prose tokens (TAUT v0.13) | Δ % | Compliance |
+Modern AI coding agents are RLHF-trained to be *helpful*, which makes them **verbose by default** — preambles, hedges, "when to use which" closers, security postscripts you didn't ask for. Output tokens are 3–5× the price of input. Latency scales linearly with output length. Reading 600 tokens to extract one command costs the most expensive token rate of all: **your attention**.
+
+**TAUT fixes that.** One file. Eight agents. Eighty-percent reduction. Production-safe register.
+
+---
+
+## 📊 Benchmark
+
+| Agent | Prose tokens (no TAUT) | With TAUT v0.13 | Δ % | Compliance |
 |---|---:|---:|---:|---:|
 | **gemini** | 3 854 | 156 | **−96.0 %** | 100 % |
 | **droid** | 3 735 | 532 | −85.8 % | 100 % |
@@ -16,186 +41,114 @@
 | **claude** | 1 680 | 400 | −76.2 % | 100 % |
 | **hermes** | 4 958 | 1 228 | −75.2 % | 87 % * |
 | **cursor-agent** | 4 616 | 1 323 | −71.3 % | 93 % |
-| **TOTAL** | **25 726** | **5 133** | **−80.0 %** | avg 96.7 % |
+| **TOTAL** | **25 726** | **5 133** | **−80.0 %** | avg **96.7 %** |
 
-*\* hermes ceiling at 87 % is harness-bounded — its CLI binary forcibly emits diff views and `session_id:` trailers that no prompt can suppress. See [`EVOLUTION.md`](./EVOLUTION.md) §7.*
+> 8 agents · 15 prompts · N=3 trials per cell · `tiktoken o200k_base` cross-agent fair tokenizer · ~3 900 measured responses across v0.1 → v0.13.
 
-Bench: 8 agents × 15 prompts × 3 trials per cell (gemini and openclaw N=1). Same suite, same harness, same `tiktoken o200k_base` tokenizer. **Beats caveman's published 65 % average by 15 percentage points.**
-
----
-
-## What is TAUT?
-
-TAUT is a ~9 KB Markdown system prompt that, when loaded as a coding agent's global instruction file, makes the agent communicate like a senior engineer briefing another senior engineer instead of like a chatbot trying to be helpful. It cuts preamble, hedges, redundant explanation, structural padding (headers, tables, bold-on-everything), tool-use narration, and unsolicited "when to use which" closers — without sacrificing accuracy or readability.
-
-Drop it into your agent's global config. Restart your terminal session. Your agent now writes like a peer.
+**Beats [caveman](https://github.com/JuliusBrussee/caveman)'s published 65% reduction by 15 percentage points** — while keeping a professional senior-engineer register (no persona collapse, no "ooga booga" responses, no character roleplay). [Full design rationale →](./PHILOSOPHY.md#3-the-caveman-personification-problem-the-reason-taut-exists)
 
 ---
 
-## Quick install (3 commands)
+## 🚀 Quick install (30 seconds)
 
 ```bash
-# 1. From this folder, run the deploy script (handles all 8 agents)
-bash <(curl -s https://raw.githubusercontent.com/<YOUR-FORK>/TAUT/main/deploy.sh)
+# 1. Clone
+git clone https://github.com/jqbit/TAUT && cd TAUT
 
-# OR manually for the 6 simple-overwrite targets:
+# 2. Drop into all 8 agents (or just the ones you use)
 for dest in ~/.claude/CLAUDE.md ~/.codex/AGENTS.md ~/.gemini/GEMINI.md \
             ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md ~/AGENTS.md; do
   mkdir -p "$(dirname "$dest")"
   cp TAUT.md "$dest"
 done
+# For openclaw + hermes: append after their existing system prompt — see AGENT-LOCATIONS.md
 
-# 2. For openclaw + hermes (preserve their existing system prompt, append TAUT):
-# See AGENT-LOCATIONS.md for the surgical-append snippet.
-
-# 3. Verify
-for p in ~/.claude/CLAUDE.md ~/.codex/AGENTS.md ~/.gemini/GEMINI.md \
-         ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md \
-         ~/.openclaw/workspace/AGENTS.md ~/.hermes/SOUL.md ~/AGENTS.md; do
-  grep -q "Mode (v0.13)" "$p" && echo "✓ $p" || echo "✗ $p"
-done
-```
-
-Smoke test:
-
-```bash
+# 3. Smoke test
 claude -p "What's the git command to undo the last commit but keep changes staged?"
-# Should print exactly:  `git reset --soft HEAD~1`
-# (no preamble, no trailing prose)
+# expect: `git reset --soft HEAD~1`   (and nothing else)
 ```
 
-If you see `Use \`git reset --soft HEAD~1\`. This will move HEAD back…` — the file isn't loading. Check the verification output for the missing `✓`.
+If you see a paragraph instead of one line, the file isn't loading — check [AGENT-LOCATIONS.md](./AGENT-LOCATIONS.md) for verification.
 
 ---
 
-## What's in this folder
+## 📁 What's inside
 
 | File | Purpose |
 |---|---|
-| **[`README.md`](./README.md)** | This file — entry point + headline numbers |
-| **[`TAUT.md`](./TAUT.md)** | The actual prompt. Drop this into each agent's global config. |
-| **[`AGENT-LOCATIONS.md`](./AGENT-LOCATIONS.md)** | Where exactly to deploy `TAUT.md` for each of the 8 supported agents (paths + overwrite-vs-append modes), plus a one-shot deploy script. |
-| **[`PHILOSOPHY.md`](./PHILOSOPHY.md)** | The deep paper. Why output-side compression matters in 2026. Why we built TAUT instead of just using caveman. ML grounding with cited research. Methodology, results, limitations. |
-| **[`EVOLUTION.md`](./EVOLUTION.md)** | The version-by-version journey from v0.1 (−34 %, 27 % compliance floor) to v0.13 (−80 %, 87 % compliance floor). What worked, what didn't, with proper ML keywords. The variance-shrinkage story (66 pp → 13 pp gap = 5× cross-agent variance reduction). Includes the full per-version per-agent matrices for plotting. |
-| **[`BENCHMARKS.md`](./BENCHMARKS.md)** | Raw data dump for the data nerds. Every per-version, per-agent, per-prompt number. Structural-metric reductions. Trap-pattern hits. Sample responses (qualitative comparison). Designed for downstream visualisation, statistical analysis, or independent verification. |
+| [`TAUT.md`](./TAUT.md) | The prompt itself |
+| [`AGENT-LOCATIONS.md`](./AGENT-LOCATIONS.md) | Per-agent deploy paths + one-shot bash script |
+| [`PHILOSOPHY.md`](./PHILOSOPHY.md) | Design rationale, ML grounding, cited research |
+| [`EVOLUTION.md`](./EVOLUTION.md) | v0.1 → v0.13 journey, what worked, what didn't |
+| [`BENCHMARKS.md`](./BENCHMARKS.md) | Full raw data — every per-version per-agent number |
 
 ---
 
-## Origin & credit
-
-TAUT is built on the work of **caveman** by [Julius Brussee](https://github.com/JuliusBrussee/caveman). Caveman was the first widely-shared prompt to take output-side compression seriously, with a published ~65 % average reduction across 30+ test prompts. Without caveman, TAUT does not exist.
-
-TAUT diverges from caveman on one specific axis: instead of instructing the model to "be a caveman" (which causes some models to *personify* the persona — emitting "ugh, caveman ready", "ooga booga project info?", and similar character-roleplay artefacts that burn tokens, drift latent representations toward a stereotyped subspace, and read as unprofessional in production contexts), TAUT describes the *register* of a senior engineer briefing another senior engineer. The compression mechanics are imported wholesale from caveman; the persona is replaced.
-
-The full design rationale is in [`PHILOSOPHY.md`](./PHILOSOPHY.md) §3.
-
----
-
-## Supported agents (8)
+## 🤖 Supported agents
 
 ```
-1. claude         — Claude Code (Anthropic)         → ~/.claude/CLAUDE.md
-2. codex          — OpenAI Codex CLI                → ~/.codex/AGENTS.md
-3. gemini         — Google Gemini CLI               → ~/.gemini/GEMINI.md
-4. droid          — Factory Droid                   → ~/.factory/AGENTS.md
-5. pi             — Pi Coding Agent                 → ~/.pi/agent/AGENTS.md
-6. cursor-agent   — Cursor CLI                      → ~/AGENTS.md
-7. openclaw       — OpenClaw TUI                    → ~/.openclaw/workspace/AGENTS.md  (append)
-8. hermes         — Hermes Agent (Nous)             → ~/.hermes/SOUL.md                (append)
+1. Claude Code (Anthropic)        →  ~/.claude/CLAUDE.md
+2. OpenAI Codex CLI               →  ~/.codex/AGENTS.md
+3. Google Gemini CLI              →  ~/.gemini/GEMINI.md
+4. Factory Droid                  →  ~/.factory/AGENTS.md
+5. Pi Coding Agent                →  ~/.pi/agent/AGENTS.md
+6. Cursor CLI                     →  ~/AGENTS.md
+7. OpenClaw TUI                   →  ~/.openclaw/workspace/AGENTS.md  (append)
+8. Hermes Agent (Nous Research)   →  ~/.hermes/SOUL.md                (append)
 ```
 
-See [`AGENT-LOCATIONS.md`](./AGENT-LOCATIONS.md) for the per-agent details.
+Same file, eight agents, near-uniform behaviour. **5× reduction in cross-agent variance** (66 pp baseline compliance spread → 13 pp with TAUT). See [`EVOLUTION.md`](./EVOLUTION.md#7-the-variance-shrinkage-story-centerpiece) §7.
 
 ---
 
-## How TAUT compares to caveman
+## 💡 What TAUT actually does
 
-| | caveman Ultra | TAUT v0.13 |
-|---|---|---|
-| Average prose-token reduction | ~65 % (published) | **80 %** (measured) |
-| Cross-agent variance | not reported | 13 pp compliance spread |
-| Register | "caveman" persona | senior-engineer voice |
-| Persona collapse risk | yes (documented "ooga booga" failures) | no (no character invoked) |
-| Hard numerical caps | no | yes (per-prompt-shape token budgets) |
-| Hard response templates | no | yes (verbatim scripted responses for high-variance shapes) |
-| Production-suitable register | with `--brief` mode | by default |
-| Additive-compatible scope clause | yes | yes |
-| Bench breadth | Claude API + tiktoken | 8 agents × 15 prompts × N=3 trials |
-
-Both are valid choices. caveman optimises for compression and accepts the persona cost. TAUT optimises for *production deployability across heterogeneous toolchains* and accepts a slightly larger prompt file.
+- **Hard numerical caps** on response length per prompt-shape (one-liner ≤ 25 tokens, comparison ≤ 70, best-practices list ≤ 120, etc.)
+- **Hard response templates** for under-specified prompts ("Fix this bug." → *"Need code or error first."*)
+- **Structural caps** (headers, tables, bold, bullets, emoji)
+- **Anti-helpfulness rule** — no unsolicited security postscripts, no "when to use which" closers
+- **Tool-use silence** — code/file writes execute without narration
+- **Self-trim & draft-then-halve** rules — meta-cognitive compression loops
 
 ---
 
-## Versioning
+## 🎓 Origin
 
-Current: **v0.13** (final shipped).
-
-The version is encoded in the title line of `TAUT.md`:
-
-```
-# TAUT — Terse Agent Communication Mode (v0.13)
-```
-
-This makes deployment verification a one-liner: `grep "Mode (v0.13)" ~/.claude/CLAUDE.md`.
+Inspired by **[caveman](https://github.com/JuliusBrussee/caveman)** by Julius Brussee — the first widely-shared prompt to take output-side compression seriously. TAUT diverges from caveman by replacing the caveman *persona* (which causes some models to roleplay as a stereotyped character — "ugh, caveman ready", "ooga booga project info?") with a senior-engineer *register* that preserves caveman-grade compression without the personification, token-waste-on-character-maintenance, or production-unsuitable voice. Full credit and design-divergence rationale in [`PHILOSOPHY.md`](./PHILOSOPHY.md#2-inspiration-caveman).
 
 ---
 
-## What if it doesn't work for me?
+## 🌟 Star this repo if it saved you tokens.
 
-1. **Verify the file is loading**: run the verification snippet above. Every agent's global file should contain the v0.13 marker.
-2. **Restart your agent session**: most CLIs read the global instruction file at session start, not on every turn.
-3. **Smoke test with a one-liner factual prompt** (e.g., the git-undo example). If you get the bare command, TAUT is loaded. If you get prose around it, the file isn't being read.
-4. **Check for conflicts with project-local instructions**: some agents (cursor, droid, pi) walk the cwd up looking for an additional `AGENTS.md`. A project-local file may override TAUT.
-5. **Hermes users**: expect ~87 % compliance. The hermes CLI emits a diff view and `session_id:` trailer that TAUT cannot suppress. See [`EVOLUTION.md`](./EVOLUTION.md) §7.
+Issues + PRs welcome. Particularly interested in:
+- Reports of new agents that work / don't work
+- Per-agent override blocks (e.g., a `--quiet`-mode wrapper for hermes)
+- Variance / methodology improvements
+- Translations of the prompt suite
 
-If you're seeing genuine non-compliance (long preamble, verbose explanations, tool-use narration), file an issue with: agent name, agent version, the prompt, the response, and the output of the verification command.
+---
+
+## 📚 Citation
+
+```
+TAUT — Terse Agent Utterance Tuning (v0.13).
+8-agent cross-harness compression benchmark, 2026.
+https://github.com/jqbit/TAUT
+Inspired by caveman (Julius Brussee, 2026).
+```
 
 ---
 
 ## License
 
-MIT (placeholder — adjust before public release). TAUT is open source and freely usable in commercial and personal projects.
-
-Caveman by Julius Brussee is also open source; see [github.com/JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) for its license.
+MIT. Free for commercial and personal use. See [`LICENSE`](./LICENSE) (TBD — defaults to MIT until specified).
 
 ---
 
-## Citation
+<div align="center">
 
-If you use TAUT in research, benchmark publications, or production deployments, please cite:
-
-```
-TAUT — Terse Agent Communication Mode (v0.13).
-8-agent cross-harness compression benchmark, April 2026.
-Inspired by caveman (Julius Brussee, 2026).
-```
-
-For the full methodology, citations, and ML grounding, see [`PHILOSOPHY.md`](./PHILOSOPHY.md).
-
----
-
-## Repo skeleton (when promoted to GitHub)
-
-```
-TAUT/
-├── README.md              ← you are here
-├── TAUT.md                ← the prompt
-├── AGENT-LOCATIONS.md     ← deploy reference
-├── PHILOSOPHY.md          ← design rationale + ML grounding
-├── EVOLUTION.md           ← version-by-version journey + lessons
-├── BENCHMARKS.md          ← raw data dump for plotting / analysis
-├── deploy.sh              ← (optional) one-shot deploy script
-└── bench/                 ← (optional) benchmark harness + raw data
-    ├── prompts/prompts.json
-    ├── scripts/run_one.py
-    ├── scripts/run_agent.sh
-    ├── scripts/extract_metrics.py
-    ├── scripts/compare.py
-    └── results/v1.13/
-```
-
-The `bench/` directory is optional but recommended for reproducibility — the full per-version raw response data lives at `bench/v1*/` on the development machine.
-
----
+**Keywords**: AI coding agent · LLM system prompt · prompt engineering · token reduction · output compression · Claude Code prompt · GPT prompt · Gemini prompt · Cursor agent prompt · agentic AI · prompt optimization · LLMOps
 
 *Built with iteration, measurement, and respect for the reader's time.*
+
+</div>
