@@ -4,7 +4,7 @@ Thanks for thinking about contributing. The bar is low — TAUT is a single Mark
 
 ## What kinds of contributions land fast
 
-1. **Agent compatibility reports.** Tested TAUT on a CLI that's not in the supported-8 list? Open an issue with the [agent-compatibility template](./.github/ISSUE_TEMPLATE/agent-compatibility.md). Even "doesn't work" reports are valuable — they reveal harness-level constraints we don't know about.
+1. **Agent compatibility reports.** Tested TAUT on a CLI that's not in the supported-9 list? Open an issue with the [agent-compatibility template](./.github/ISSUE_TEMPLATE/agent-compatibility.md). Even "doesn't work" reports are valuable — they reveal harness-level constraints we don't know about.
 
 2. **Bug reports.** A specific prompt where TAUT v0.13 produces non-compliant or wrong output? File via the [bug template](./.github/ISSUE_TEMPLATE/bug.md) with the agent name, prompt, expected output, and actual output.
 

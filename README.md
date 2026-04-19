@@ -11,13 +11,13 @@ No fine-tuning. No API change. No harness change. **Just one Markdown file** dro
 
 [![release](https://img.shields.io/github/v/release/jqbit/TAUT?style=flat-square&color=blue&label=release)](https://github.com/jqbit/TAUT/releases)
 [![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)](./LICENSE)
-[![agents](https://img.shields.io/badge/agents-8-orange?style=flat-square)](#-supported-agents)
+[![agents](https://img.shields.io/badge/agents-9-orange?style=flat-square)](#-supported-agents)
 [![reduction](https://img.shields.io/badge/output_reduction-80%25-red?style=flat-square)](#-benchmark)
 [![compliance](https://img.shields.io/badge/avg_compliance-96.7%25-brightgreen?style=flat-square)](#-benchmark)
 [![stars](https://img.shields.io/github/stars/jqbit/TAUT?style=flat-square&color=yellow)](https://github.com/jqbit/TAUT/stargazers)
 [![last commit](https://img.shields.io/github/last-commit/jqbit/TAUT?style=flat-square)](https://github.com/jqbit/TAUT/commits/main)
 
-**Works with:** Claude Code · OpenAI Codex · Google Gemini · Factory Droid · Cursor Agent · Pi · Hermes · OpenClaw
+**Works with:** Claude Code · OpenAI Codex · Google Gemini · Factory Droid · Cursor Agent · Pi · GitHub Copilot · Hermes · OpenClaw
 
 </div>
 
@@ -27,7 +27,7 @@ No fine-tuning. No API change. No harness change. **Just one Markdown file** dro
 
 Modern AI coding agents are RLHF-trained to be *helpful*, which makes them **verbose by default** — preambles, hedges, "when to use which" closers, security postscripts you didn't ask for. Output tokens are 3–5× the price of input. Latency scales linearly with output length. Reading 600 tokens to extract one command costs the most expensive token rate of all: **your attention**.
 
-**TAUT fixes that.** One file. Eight agents. Eighty-percent reduction. Production-safe register.
+**TAUT fixes that.** One file. Nine agents. Eighty-percent reduction. Production-safe register.
 
 ---
 
@@ -45,7 +45,7 @@ Modern AI coding agents are RLHF-trained to be *helpful*, which makes them **ver
 | **cursor-agent** | 4 616 | 1 323 | −71.3 % | 93 % |
 | **TOTAL** | **25 726** | **5 133** | **−80.0 %** | avg **96.7 %** |
 
-> 8 agents · 15 prompts · N=3 trials per cell · `tiktoken o200k_base` cross-agent fair tokenizer · ~3 900 measured responses across v0.1 → v0.13.
+> 8 agents · 15 prompts · N=3 trials per cell · `tiktoken o200k_base` cross-agent fair tokenizer · ~3 900 measured responses across v0.1 → v0.13. GitHub Copilot CLI added as ninth supported agent post-v0.13; benchmark pending v0.14.
 
 **Beats [caveman](https://github.com/JuliusBrussee/caveman)'s published 65% reduction by 15 percentage points** — while keeping a professional senior-engineer register (no persona collapse, no "ooga booga" responses, no character roleplay). [Full design rationale →](./PHILOSOPHY.md#3-the-caveman-personification-problem-the-reason-taut-exists)
 
@@ -77,14 +77,17 @@ mkdir -p ~/.pi/agent && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/
 
 # Cursor CLI
 curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/AGENTS.md
+
+# GitHub Copilot CLI
+mkdir -p ~/.copilot && curl -fsSL https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md -o ~/.copilot/copilot-instructions.md
 ```
 
 <details>
-<summary><b>All-six-overwrite-agents at once</b></summary>
+<summary><b>All-seven-overwrite-agents at once</b></summary>
 
 ```bash
 TAUT_URL=https://raw.githubusercontent.com/jqbit/TAUT/main/TAUT.md
-for d in ~/.claude/CLAUDE.md ~/.codex/AGENTS.md ~/.gemini/GEMINI.md ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md ~/AGENTS.md; do
+for d in ~/.claude/CLAUDE.md ~/.codex/AGENTS.md ~/.gemini/GEMINI.md ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md ~/AGENTS.md ~/.copilot/copilot-instructions.md; do
   mkdir -p "$(dirname "$d")" && curl -fsSL "$TAUT_URL" -o "$d"
 done
 ```
@@ -138,11 +141,12 @@ If you see a paragraph instead of one line, the file isn't loading. See [`AGENT-
 4. Factory Droid                  →  ~/.factory/AGENTS.md
 5. Pi Coding Agent                →  ~/.pi/agent/AGENTS.md
 6. Cursor CLI                     →  ~/AGENTS.md
-7. OpenClaw TUI                   →  ~/.openclaw/workspace/AGENTS.md  (append)
-8. Hermes Agent (Nous Research)   →  ~/.hermes/SOUL.md                (append)
+7. GitHub Copilot CLI             →  ~/.copilot/copilot-instructions.md
+8. OpenClaw TUI                   →  ~/.openclaw/workspace/AGENTS.md  (append)
+9. Hermes Agent (Nous Research)   →  ~/.hermes/SOUL.md                (append)
 ```
 
-Same file, eight agents, near-uniform behaviour. **5× reduction in cross-agent variance** (66 pp baseline compliance spread → 13 pp with TAUT). See [`EVOLUTION.md`](./EVOLUTION.md#7-the-variance-shrinkage-story-centerpiece) §7.
+Same file, nine agents, near-uniform behaviour. **5× reduction in cross-agent variance** (66 pp baseline compliance spread → 13 pp with TAUT, measured on the v0.13 eight-agent set). See [`EVOLUTION.md`](./EVOLUTION.md#7-the-variance-shrinkage-story-centerpiece) §7.
 
 ---
 
@@ -220,7 +224,7 @@ Inspired by **[caveman](https://github.com/JuliusBrussee/caveman)** by Julius Br
 [![star history](https://img.shields.io/github/stars/jqbit/TAUT?style=social)](https://github.com/jqbit/TAUT/stargazers)
 
 Issues + PRs welcome. Particularly interested in:
-- Agent-compatibility reports for CLIs not in the supported-8 list
+- Agent-compatibility reports for CLIs not in the supported-9 list
 - Per-agent override blocks (e.g., a `--quiet`-mode wrapper for hermes)
 - Variance / methodology improvements
 - Translations of the prompt suite to non-English contexts
