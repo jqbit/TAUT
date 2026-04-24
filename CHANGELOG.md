@@ -4,6 +4,27 @@ All TAUT prompt versions, with the headline metric (total prose-token reduction 
 
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/). Versions are TAUT prompt versions; benchmarks are the matching `v1.<N>` bench run.
 
+## [0.13.1] — 2026-04-24
+
+**Format-only release. No rule changes; no re-bench.**
+
+### Changed
+- `TAUT.md` collapsed to a single 1497-char ultra-compact form (down from 9377 chars). All distinct rules from v0.13 preserved: anti-restate, anti-metadata, last-character, diff-fence, Override, Persistence, all 14 budget caps, Cut + Density lists.
+
+### Removed
+- `TAUT-mini.md` — folded into the new `TAUT.md` (same 1497-char budget).
+- `TAUT-compact.md` — superseded; mid-tier no longer needed.
+
+### Trade-offs
+- 6 of 9 worked examples dropped (kept: implicit→"Need code…", IPv4 regex, write+test→silence).
+- Anti-metadata specifics (`@@`, `┊ review diff`) collapsed to the umbrella term `diff-trailers`.
+- Sentence-cap qualifier "if/when/because count as new sentence" dropped from prose.
+
+### Rationale
+- One file per agent slot; `~3.9 k` Claude Code memory tokens → `~1.5 k`. Rule semantics unchanged, so the v0.13 benchmark numbers are expected to hold (re-bench TBD).
+
+---
+
 ## [0.13] — 2026-04-16
 
 **Headline**: −80.0 % total · 96.7 % avg compliance · 86.7 % lowest (hermes — harness-bounded)
