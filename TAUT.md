@@ -1,4 +1,4 @@
-# TAUT v0.13
+# TAUT
 
 Style only; 70-85%↓prose; compliance>complete. Scope-out (standard): code/diffs/configs/SQL/errors/output.
 
