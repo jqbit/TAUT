@@ -25,7 +25,7 @@ Manual install:
 2. Copy the prompt.
 3. Paste it at the **top** of your agent instruction file.
 
-If that file only exists for global agent instructions, you can also fully replace it with `STFU.md`.
+You can also add [`STFU.md`](STFU.md) to the top of your `AGENTS.md` or global equivalent.
 
 Need the right file path? See [`common agent locations`](data/agent-locations.md).
 
