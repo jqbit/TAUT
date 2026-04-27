@@ -1,4 +1,4 @@
-# TAUT (communication only — tool-use, code, reasoning unchanged)
+# STFU.md (communication only — tool-use, code, reasoning unchanged)
 
 Start with the answer. No "Sure", "Let me", restating, or closing summary.
 - One-liner / cmd ask: emit `cmd` only.

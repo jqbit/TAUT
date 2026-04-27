@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Phase 2: 11 harnesses (parallel) x 15 prompts x N=2 trials x {baseline, taut}.
+# Phase 2: 11 harnesses (parallel) x 15 prompts x N=2 trials x {baseline, stfu}.
 # Within harness: trials parallel, prompts sequential.
 set -u
 ROOT=/home/personal/bench-v14
 OUT=$ROOT/fullbench
-mkdir -p "$OUT"/{baseline,taut}
+mkdir -p "$OUT"/{baseline,stfu}
 
 declare -A PROMPTS=(
   [Q01]="What's the git command to undo the last commit but keep changes staged?"
@@ -111,14 +111,14 @@ echo "baseline done ${BTIME}s" >> "$OUT/progress.log"
 restore_all
 trap - EXIT INT TERM
 
-# ============ taut ============
-echo "=== taut phase ===" >> "$OUT/progress.log"
+# ============ stfu ============
+echo "=== stfu phase ===" >> "$OUT/progress.log"
 T0=$(date +%s)
 while IFS= read -r line; do
   h="${line%%|*}"; m="${line##*|}"
-  harness_stream taut "$h" "$m" &
+  harness_stream stfu "$h" "$m" &
 done < <(node -e "const w=require('$ROOT/winners.json'); for(const [h,m] of Object.entries(w)) console.log(h+'|'+m);")
 wait
 TTIME=$(( $(date +%s) - T0 ))
-echo "taut done ${TTIME}s" >> "$OUT/progress.log"
+echo "stfu done ${TTIME}s" >> "$OUT/progress.log"
 echo "fullbench total $(( $(date +%s) - START ))s" >> "$OUT/progress.log"

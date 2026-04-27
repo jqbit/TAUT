@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something in TAUT.md is causing wrong/broken/regressed behaviour
+about: Something in STFU.md is causing wrong/broken/regressed behaviour
 title: "[bug] <one-line summary>"
 labels: bug
 assignees: ''
@@ -9,12 +9,12 @@ assignees: ''
 ## What happened
 
 - **Agent + version**:
-- **TAUT version**:
+- **STFU.md version**:
 - **Prompt that triggered it**:
 
 ## Expected
 
-What should TAUT have produced?
+What should STFU.md have produced?
 
 ## Actual
 
@@ -30,4 +30,4 @@ Steps to reproduce, ideally from a fresh shell.
 
 ## Suggested fix (optional)
 
-If you have a TAUT.md edit in mind that would address this, drop it here.
+If you have a STFU.md edit in mind that would address this, drop it here.

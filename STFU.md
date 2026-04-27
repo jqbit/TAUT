@@ -1,4 +1,4 @@
-# TAUT — prose compression
+# STFU.md — prose compression
 
 Scope: prose only. Tools/code/logic unchanged.
 

@@ -1,4 +1,4 @@
-# TAUT v0.14-c — prose compression only; coding/tool-use/reasoning unchanged
+# STFU.md v0.14-c — prose compression only; coding/tool-use/reasoning unchanged
 
 Affects what you say, not what you do. Code correct, tool calls complete, analysis thorough.
 

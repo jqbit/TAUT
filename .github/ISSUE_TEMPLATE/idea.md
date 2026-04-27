@@ -1,6 +1,6 @@
 ---
 name: Idea / improvement
-about: Propose a new rule, response template, or compression tactic for TAUT v0.14+
+about: Propose a new rule, response template, or compression tactic for STFU.md v0.14+
 title: "[idea] <one-line summary>"
 labels: enhancement
 assignees: ''
@@ -8,7 +8,7 @@ assignees: ''
 
 ## The idea
 
-What rule, template, or tactic would you add to `TAUT.md`?
+What rule, template, or tactic would you add to `STFU.md`?
 
 ## What it would solve
 
@@ -24,4 +24,4 @@ Could this rule make any *other* prompt-shape worse? Which?
 
 ## Draft text
 
-If you have draft TAUT.md wording, paste it here.
+If you have draft STFU.md wording, paste it here.

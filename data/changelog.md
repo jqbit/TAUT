@@ -1,19 +1,19 @@
 # Changelog
 
-All TAUT prompt versions, with the headline metric (total prose-token reduction across 8 agents) and the key change for each.
+All STFU.md prompt versions, with the headline metric (total prose-token reduction across 8 agents) and the key change for each.
 
-The format is loosely based on [Keep a Changelog](https://keepachangelog.com/). Versions are TAUT prompt versions; benchmarks are the matching `v1.<N>` bench run.
+The format is loosely based on [Keep a Changelog](https://keepachangelog.com/). Versions are STFU.md prompt versions; benchmarks are the matching `v1.<N>` bench run.
 
 ## [0.13.1] — 2026-04-24
 
 **Format-only release. No rule changes; no re-bench.**
 
 ### Changed
-- `TAUT.md` collapsed to a single 1497-char ultra-compact form (down from 9377 chars). All distinct rules from v0.13 preserved: anti-restate, anti-metadata, last-character, diff-fence, Override, Persistence, all 14 budget caps, Cut + Density lists.
+- `STFU.md` collapsed to a single 1497-char ultra-compact form (down from 9377 chars). All distinct rules from v0.13 preserved: anti-restate, anti-metadata, last-character, diff-fence, Override, Persistence, all 14 budget caps, Cut + Density lists.
 
 ### Removed
-- `TAUT-mini.md` — folded into the new `TAUT.md` (same 1497-char budget).
-- `TAUT-compact.md` — superseded; mid-tier no longer needed.
+- `STFU.md-mini.md` — folded into the new `STFU.md` (same 1497-char budget).
+- `STFU.md-compact.md` — superseded; mid-tier no longer needed.
 
 ### Trade-offs
 - 6 of 9 worked examples dropped (kept: implicit→"Need code…", IPv4 regex, write+test→silence).
@@ -38,7 +38,7 @@ After spot-check identified cursor regression on its default `composer-2-fast` m
 
 ### Cursor model recommendation (new)
 
-Cursor's default `composer-2-fast` model is RLHF-trained for context-rich responses and does NOT respect TAUT's hard templates (workspace descriptions, alternative-command tips, explanatory closers always emitted). Switching cursor's model to `gpt-5.3-codex` (or `gpt-5.2`) restores TAUT compliance and the bench numbers above. Recommended alias:
+Cursor's default `composer-2-fast` model is RLHF-trained for context-rich responses and does NOT respect STFU.md's hard templates (workspace descriptions, alternative-command tips, explanatory closers always emitted). Switching cursor's model to `gpt-5.3-codex` (or `gpt-5.2`) restores STFU.md compliance and the bench numbers above. Recommended alias:
 
 ```bash
 alias cursor-agent='agent --yolo --model gpt-5.3-codex'
@@ -46,9 +46,9 @@ alias cursor-agent='agent --yolo --model gpt-5.3-codex'
 
 ### Supported agents narrowed to 5
 
-The repo now supports 5 agents (down from 9). Dropped: codex, copilot, hermes, openclaw — none re-bench-tested at v0.13.1 on this host. The v0.13 numbers for those 4 are preserved in [`BENCHMARKS.md` §1–§11](./BENCHMARKS.md) for historical reference and are reproducible by anyone running them with the v0.13 9 377-char form.
+The repo now supports 5 agents (down from 9). Dropped: codex, copilot, hermes, openclaw — none re-bench-tested at v0.13.1 on this host. The v0.13 numbers for those 4 are preserved in [`BENCHMARKS.md` §1–§11](./benchmarks.md) for historical reference and are reproducible by anyone running them with the v0.13 9 377-char form.
 
-See [`BENCHMARKS.md` §14](./BENCHMARKS.md#14-v0131-five-agent-bench-2026-04-24) for raw per-cell numbers, methodology, caveats, and reproducibility steps.
+See [`BENCHMARKS.md` §14](./benchmarks.md#14-v0131-five-agent-bench-2026-04-24) for raw per-cell numbers, methodology, caveats, and reproducibility steps.
 
 ---
 
@@ -74,7 +74,7 @@ See [`BENCHMARKS.md` §14](./BENCHMARKS.md#14-v0131-five-agent-bench-2026-04-24)
 - Cursor compliance recovered from 86.7 % → 100 %.
 
 ### Lesson
-- A leaner TAUT.md outperforms a bloated one when marginal rules have low impact. Prompt-self-bloat dilutes earlier rules.
+- A leaner STFU.md outperforms a bloated one when marginal rules have low impact. Prompt-self-bloat dilutes earlier rules.
 
 ---
 
@@ -127,7 +127,7 @@ See [`BENCHMARKS.md` §14](./BENCHMARKS.md#14-v0131-five-agent-bench-2026-04-24)
 - Draft-then-halve meta-cognitive rule.
 
 ### Regressed
-- Aggressive cap tightening + growing TAUT.md regressed total Δ %. Diminishing-returns territory.
+- Aggressive cap tightening + growing STFU.md regressed total Δ %. Diminishing-returns territory.
 
 ---
 
@@ -223,4 +223,4 @@ See [`BENCHMARKS.md` §14](./BENCHMARKS.md#14-v0131-five-agent-bench-2026-04-24)
 
 - Every version was bench-tested across **8 agents × 15 prompts × 3 trials** (gemini and openclaw at N=1 due to harness constraints). ~300 measured responses per version, ~3 900 total across the v0.1 → v0.13 journey.
 - The single most important macro-finding was **cross-agent variance shrinkage**: baseline compliance spread of 66 percentage points (cursor 27 % ↔ openclaw 93 %) collapsed to 13 pp by v0.13 (hermes 87 % ↔ five agents at 100 %). 5× reduction.
-- Full per-version per-agent matrices in [`BENCHMARKS.md`](./BENCHMARKS.md). Narrative in [`EVOLUTION.md`](./EVOLUTION.md).
+- Full per-version per-agent matrices in [`BENCHMARKS.md`](./benchmarks.md). Narrative in [`EVOLUTION.md`](./progression.md).

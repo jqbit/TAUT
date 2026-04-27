@@ -1,15 +1,15 @@
-# TAUT v0.14 — bench methodology
+# STFU.md v0.14 — bench methodology
 
 ## Goal
 
-Quantify how much TAUT reduces an agent's prose output (in tokens) without degrading tool-use, code correctness, or reasoning. Keep the prompt < 1 500 chars.
+Quantify how much STFU.md reduces an agent's prose output (in tokens) without degrading tool-use, code correctness, or reasoning. Keep the prompt < 1 500 chars.
 
 ## Axes
 
 1. **Harness** — 11 CLIs: claude, codex, copilot, droid, hermes, opencode, openclaw, pi, cline, agent (cursor), gemini. 9 routed via `ollama launch <h> --model <m>`; agent + gemini on native backends.
 2. **Model** (where applicable) — 6 Tier-A Ollama cloud models: kimi-k2.6, deepseek-v4-flash, gemini-3-flash-preview, qwen3-coder-next, glm-5.1, minimax-m2.7. Tier-B (6 more) screened on demand.
 3. **Prompt** — 15 prompts (Q01..Q15) spanning shapes (one-liner, greet, error, debug, comparison, how-to, tool-use, recap, regex-only, open-ended, etc.) with per-prompt token caps.
-4. **Condition** — `baseline` (TAUT moved aside via `mv <slot> <slot>.bak`) vs `taut` (TAUT in place).
+4. **Condition** — `baseline` (STFU.md moved aside via `mv <slot> <slot>.bak`) vs `stfu` (STFU.md in place).
 5. **Trial** — N=2 per cell (N=3 used when σ > 25 % of mean).
 
 ## Measurement
@@ -18,7 +18,7 @@ Quantify how much TAUT reduces an agent's prose output (in tokens) without degra
 - Tokenizer: `tiktoken` `o200k_base`.
 - Prose-only count: strip ANSI escapes, harness banners (config-mod messages, TUI frames, copilot footer, codex session/header lines), and fenced code blocks. If stripping fences leaves < 3 chars, the fence content WAS the answer (one-liner) — count fence content stripped of backticks.
 - Per-cell token = mean across N trials.
-- Per-harness reduction % = `(sum_baseline - sum_taut) / sum_baseline * 100`.
+- Per-harness reduction % = `(sum_baseline - sum_stfu) / sum_baseline * 100`.
 - Compliance = fraction of cells whose mean tok ≤ shape cap.
 
 ## Sanity gates
@@ -59,7 +59,7 @@ The variant that wins on 1, then 2, then 3, ... is promoted.
 
 ## Reproducibility
 
-- `bench/v0.14-bench.sh` — baseline + TAUT phases, per-harness streams.
+- `bench/v0.14-bench.sh` — baseline + STFU.md phases, per-harness streams.
 - `bench/tokenize.js` — strip + tokenize one log.
 - `bench/analyze.js` — per-harness reduction + compliance + cell matrix.
 - `bench/make-charts.js` — emit SVG bar/heatmap/line charts.
