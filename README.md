@@ -19,26 +19,15 @@ STFU.md makes AI assistants answer directly: less filler, fewer caveats, no fake
 
 ### Coding agents
 
-Download `STFU.md`, then put it in the instruction file your agent actually uses.
+Manual install:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/jqbit/STFU.md/main/STFU.md -o STFU.md
-```
+1. Open [`STFU.md`](STFU.md).
+2. Copy the prompt.
+3. Paste it at the **top** of your agent instruction file.
 
-Common locations:
+If that file only exists for global agent instructions, you can also fully replace it with `STFU.md`.
 
-| Agent | File |
-|---|---|
-| Claude Code | `~/.claude/CLAUDE.md` |
-| Gemini CLI | `~/.gemini/GEMINI.md` |
-| Codex | `~/.codex/AGENTS.md` |
-| Cursor Agent | `~/AGENTS.md` |
-| Factory Droid | `~/.factory/AGENTS.md` |
-| Pi | `~/.pi/agent/AGENTS.md` |
-| Hermes | `~/.hermes/SOUL.md` |
-| OpenClaw | `~/.openclaw/AGENTS.md` |
-
-More locations: [`data/agent-locations.md`](data/agent-locations.md)
+Need the right file path? See [`common agent locations`](data/agent-locations.md).
 
 ### ChatGPT / Claude / Gemini / Perplexity
 
