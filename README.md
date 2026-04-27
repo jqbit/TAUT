@@ -91,6 +91,10 @@ Need code or error first.
 STFU.md makes your agents shut the flip up — cuts coding-agent yap by ~80%.
 ```
 
+## Contributing
+
+Want to improve the prompt, add an agent path, or share benchmark results? See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
 ## License
 
 MIT. See [`LICENSE`](LICENSE).
