@@ -33,6 +33,39 @@ Controlled ablation on Claude Sonnet 4.6 (n=12 single-turn × 4 conditions = 48 
 ### Methodology note
 This was a single-model controlled A/B (Claude Sonnet 4.6, paired by prompt). Earlier benchmarks (v0.13.1, see §[0.13.1] below) used a 5-agent multi-harness sweep with different methodology. The two are complementary, not directly comparable. Test rig kept at `/tmp/stfu-test/scripts/` for re-runs.
 
+### V1 → V4 ablation (the path to v0.14.3)
+
+The v0.14.3 release came out of a 4-variant comparison. Each variant was run against the same controlled bench (12 single-turn prompts × paired conditions, plus 3 × 8-turn realistic coding conversations) on Claude Sonnet 4.6 via `claude -p --append-system-prompt` with empty user-CLAUDE.md.
+
+| Variant | What changed vs v0.14.2 | Single-turn (n=12) | 8-turn overall (n=24) | T1 → T8 | Verdict |
+|---|---|---:|---:|---:|---|
+| **V1** | nothing (v0.14.2 baseline, with `## Templates`) | 14.0 words (−83.6%) | 18.8 (−77.9%) | 39.7 → 9.0 | Highest compression. Refused engagement on under-specified prompts (e.g. *"Need code or error first."* on `error-undef`). |
+| **V2** | full research rewrite: positive examples in `<example>` XML, role + tool-call carve-out, recency anchor (delete-pass), no banned-phrase list | 43.4 (−49.1%) | 50.3 (−41.0%) | 101.3 → 23.7 | Most natural register; preserves reasoning. Least efficient. Slight closer-phrase rate (33–67% on some turns). |
+| **V3** | hybrid: V2 scaffolding + V1's enforceable shape rules ("verdict first; one supporting clause; stop"; "one sentence per claim") + 5th example demonstrating allowed reasoning | not run | 33.9 (−60.2%) | 88.7 → 14.3 | Sat between V1 and V2 as designed. Missed the 70–80% target band. Steepest negative slope (tightens over conversation, p=0.016). |
+| **V4** | V1 minus `## Templates` only — single-section deletion, otherwise byte-identical | **17.1 (−80.0%)** | **21.2 (−75.1%)** | 49.7 → 7.3 | **Selected as v0.14.3.** Statistically indistinguishable from V1 (T8 p=0.74, T4 p=0.07, T1 p=0.05 borderline). Fixes the engagement-refusal failure for ~3 pp of compression cost. |
+
+**Decay:** No condition decayed across 8 turns. All slopes were negative or flat (responses tightened as conversations progressed, opposite of the failure mode the redesign was originally hypothesized to fix).
+
+**Compliance markers (opener%, closer%, recap%):** Near-zero for V1, V3, V4 across all turns. V2 had a slight closer-phrase tendency at some turns (33–67%), but no meaningful drift.
+
+**Code-chars preservation (carve-out check):** All four variants reduce code output relative to control by 15–35%, but ranking preserved (V2 > V3 > V4 ≈ V1). Carve-out is partially leaky in all variants — known limitation.
+
+**Pairwise V1 vs V4 (the headline ablation):**
+
+| metric | V1 | V4 | Δ | p | sig |
+|---|---:|---:|---:|---:|---|
+| Single-turn avg prose words | 14.0 | 17.1 | +3.1 | — | small effect |
+| 8-turn T1 | 39.7 | 49.7 | +10.0 | 0.05 | borderline |
+| 8-turn T4 | 13.7 | 19.3 | +5.7 | 0.07 | ns |
+| 8-turn T8 | 9.0 | 7.3 | **−1.7** | 0.74 | ns (V4 slightly tighter) |
+| Engagement on `error-undef` | 0 prose words (refusal) | 48 prose words (3 causes + 3 fixes) | — | — | **fixed** |
+
+**Why not V2 or V3?**
+- **V2** was research-correct (Anthropic best practices: examples > rules; positive over negative; role + recency placement) but the empirical compression cost was too steep (−41% vs control vs V1's −78%). The structural improvements didn't translate into compression on this model. The original premise — that V1 "doesn't follow instructions" — was empirically refuted by every benchmark V1 was in.
+- **V3** correctly landed between V1 and V2, but the 60% reduction missed the 70–80% target band and the added complexity (extra examples, anchor sentence, dual-rule structure) didn't earn its tokens against a single-section deletion of V1.
+
+**Total benchmark cost across all variants:** ~$2.70 USD across 159 API calls (Sonnet 4.6 standard tier). The full test rig (parallel xargs runners, paired t-test analysis script, decay regression) is preserved at `/tmp/stfu-test/scripts/` for future re-runs.
+
 ---
 
 ## [0.13.1] — 2026-04-24
