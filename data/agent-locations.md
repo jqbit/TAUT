@@ -15,11 +15,11 @@ Where to drop `TLDR.md` (or `TLDR.blunt.md`) for each supported coding-agent CLI
 | 5 | opencode (SST opencode) | `~/.config/opencode/AGENTS.md` | full overwrite |
 | 6 | droid (Factory Droid) | `~/.factory/AGENTS.md` | full overwrite |
 | 7 | pi (Pi Coding Agent) | `~/.pi/agent/AGENTS.md` | full overwrite |
-| 8 | hermes (Hermes built-in memory) | `~/.hermes/memories/MEMORY.md` | **append** as new `§`-block |
+| 8 | hermes (Hermes persona/instructions) | `~/.hermes/SOUL.md` | append or merge into existing persona file |
 
-> **Hermes is special.** Its built-in `MEMORY.md` is "always active" memory containing user-curated entries separated by `§`. **Do not overwrite** — append the TLDR prompt as a new memory block (separated by `§`). Or condense to a single dense paragraph since hermes treats memory entries as prose blocks.
+> **Hermes is special.** Put TLDR in `~/.hermes/SOUL.md`, not `MEMORY.md`. `SOUL.md` is the live persona/instruction file loaded every message; `MEMORY.md` is for user/profile memory and should not be used as a prompt dump.
 
-The file is just the prompt by itself — no merge, no append (except hermes).
+The file is just the prompt by itself — no merge, no append, except Hermes where you usually merge it into the existing `SOUL.md` persona.
 
 ## ⚡ Fastest install — pick your agent, run one line
 
@@ -48,18 +48,13 @@ for d in ~/.claude/CLAUDE.md ~/.gemini/GEMINI.md ~/.codex/AGENTS.md \
 done
 ```
 
-### Hermes (append, don't overwrite)
+### Hermes (merge into SOUL.md)
 
 ```bash
-mkdir -p ~/.hermes/memories
-# Get current memory (preserves any user notes)
-EXISTING=$(cat ~/.hermes/memories/MEMORY.md 2>/dev/null)
-# Append TLDR as new §-section
-{
-  echo "$EXISTING"
-  [ -n "$EXISTING" ] && echo "§"
-  curl -fsSL "$TLDR_URL"
-} > ~/.hermes/memories/MEMORY.md
+mkdir -p ~/.hermes
+# If you already have a persona in SOUL.md, merge TLDR into it instead of replacing it blindly.
+# If you want TLDR only, overwrite SOUL.md directly:
+curl -fsSL "$TLDR_URL" -o ~/.hermes/SOUL.md
 ```
 
 ## Per-agent notes
@@ -101,8 +96,8 @@ for p in ~/.claude/CLAUDE.md ~/.gemini/GEMINI.md ~/.codex/AGENTS.md \
          ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md; do
   [ -f "$p" ] && grep -q "^# TLDR" "$p" && echo "✓ $p" || echo "✗ $p"
 done
-# Hermes (different format — looks for the TLDR.blunt mode marker in MEMORY.md)
-grep -q "TLDR.blunt mode" ~/.hermes/memories/MEMORY.md 2>/dev/null && echo "✓ ~/.hermes/memories/MEMORY.md" || echo "✗ ~/.hermes/memories/MEMORY.md"
+# Hermes
+grep -q "^# TLDR" ~/.hermes/SOUL.md 2>/dev/null && echo "✓ ~/.hermes/SOUL.md" || echo "✗ ~/.hermes/SOUL.md"
 ```
 
 You should see ✓ for each of the locations you actually installed to.
