@@ -78,7 +78,7 @@ Current prompt sizes:
 | File | Bytes |
 |---|---:|
 | [`TLDR.md`](TLDR.md) | 1,165 |
-| [`TLDR.blunt.md`](TLDR.blunt.md) | 1,478 |
+| [`TLDR.blunt.md`](TLDR.blunt.md) | 1,487 |
 
 Headline historical results:
 
