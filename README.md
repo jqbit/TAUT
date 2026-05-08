@@ -1,6 +1,6 @@
 # TLDR.md — Too Long Didn't Read
 
-**The tiny prompt that cuts your agent’s yap by ~80%.**
+**The tiny prompt that gets your agent to the point.**
 
 TLDR.md makes AI assistants answer directly — no filler, no fake enthusiasm, no “let me know if...” sludge.
 
@@ -9,6 +9,15 @@ It is literally just a tiny Markdown prompt. Copy it where your agent reads inst
 > **It does NOT make the model DUMBER.**
 >
 > It **ONLY CHANGES** the **COMMUNICATION STYLE**.
+
+## Current defaults
+
+- default: 1 sentence
+- target: 3 words
+- 1 word when sufficient
+- default max: 6 words
+- longer only if asked
+- greet: 1 word
 
 ## Which file should I use?
 
@@ -68,12 +77,12 @@ Current prompt sizes:
 
 | File | Bytes |
 |---|---:|
-| [`TLDR.md`](TLDR.md) | 1,607 |
-| [`TLDR.blunt.md`](TLDR.blunt.md) | 1,868 |
+| [`TLDR.md`](TLDR.md) | 1,165 |
+| [`TLDR.blunt.md`](TLDR.blunt.md) | 1,478 |
 
-Headline results:
+Headline historical results:
 
-Note: results below were measured on the previous shipped prompts. Re-run benchmarks after adopting the current drafts.
+Note: results below were measured on earlier shipped prompts. The current prompt files were later tightened to a 1-sentence / 3-word-default / 6-word-max profile and have not yet been rerun through the full bench.
 
 - **TLDR.md v0.13.1:** −82.1% total prose reduction, 100% average compliance (5 agents × 5 prompts).
 - **TLDR.md v0.14.3:** −80.0% single-turn prose reduction; −75.1% across 8-turn coding conversations; no significant decay.
@@ -86,12 +95,11 @@ See [`data/benchmarks.md`](data/benchmarks.md), [`data/dspy-cross-model-results.
 ## Example outputs
 
 ```text
-Cause: port already bound.
-Fix: kill process or change PORT.
+Port busy; free it.
 ```
 
 ```text
-Yes — use SQLite first. Switch when writes/concurrency hurt.
+Yes. Start SQLite.
 ```
 
 ```text
@@ -101,7 +109,7 @@ git reset --soft HEAD~1
 ## Share line
 
 ```text
-TLDR.md gets your agents to the point — cuts your agent’s yap by ~80%.
+TLDR.md gets agents to the point.
 ```
 
 ## Contributing

@@ -37,7 +37,10 @@ jobs:
           python3 -m json.tool data/visualizations/charts.json >/dev/null
 
       - name: Check Python syntax
-        run: python3 -m py_compile bench/dspy/*.py bench/check-md-links.py
+        run: python3 -m py_compile bench/dspy/*.py bench/check-md-links.py bench/check-doc-sync.py
 
       - name: Check Markdown links
         run: python3 bench/check-md-links.py
+
+      - name: Check doc/prompt sync
+        run: python3 bench/check-doc-sync.py

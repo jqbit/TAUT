@@ -1,6 +1,8 @@
 # TLDR.md — bench methodology
 
-## v0.18 — DSPy-style instruction evolution + cross-model held-out (current)
+> **Historical note:** This methodology describes the earlier benchmarked prompt generations (`v0.16.0` / `v0.18.0` era). The current prompt files were later tightened to a 1-sentence / 3-word-default / 6-word-max profile, so the metric definitions below are historical until the suite is rerun or revised.
+
+## v0.18 — DSPy-style instruction evolution + cross-model held-out (historical benchmark design)
 
 ### Goal
 

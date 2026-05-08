@@ -2,6 +2,8 @@
 
 Last run: 2026-05-01. Test rig at `bench/dspy/`.
 
+> **Historical note:** These results describe the earlier benchmarked prompt generations (`TLDR.md v0.16.0`, `TLDR.blunt.md v0.18.0`). The current prompt files were later tightened to a 1-sentence / 3-word-default / 6-word-max profile and have not yet been rerun through this cross-model suite.
+
 ## Setup
 
 - **Generator agents (5):** claude (Sonnet via `claude -p`), codex (GPT-5 via `codex exec`), cursor-agent (sonnet via `cursor-agent --print`), gemini (gemini-cli), opencode (kimi-k2.6 via `opencode run`).

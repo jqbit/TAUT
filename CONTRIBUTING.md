@@ -45,6 +45,7 @@ Please include:
 - before/after examples if possible
 - which agent/app you tested with
 - whether the prompt still stays concise
+- whether the default still holds: 1 sentence, target 3 words, default max 6 words, greet = 1 word
 
 You do **not** need to run the full benchmark for every small PR. Manual examples are fine.
 
@@ -68,8 +69,9 @@ node --check bench/make-charts.js
 python3 -m json.tool data/benchmarks-summary.json >/dev/null
 python3 -m json.tool data/benchmarks-matrix.json >/dev/null
 python3 -m json.tool data/visualizations/charts.json >/dev/null
-python3 -m py_compile bench/dspy/*.py bench/check-md-links.py
+python3 -m py_compile bench/dspy/*.py bench/check-md-links.py bench/check-doc-sync.py
 python3 bench/check-md-links.py
+python3 bench/check-doc-sync.py
 ```
 
 ## Issues

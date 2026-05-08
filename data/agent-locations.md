@@ -96,8 +96,8 @@ for p in ~/.claude/CLAUDE.md ~/.gemini/GEMINI.md ~/.codex/AGENTS.md \
          ~/.factory/AGENTS.md ~/.pi/agent/AGENTS.md; do
   [ -f "$p" ] && grep -q "^# TLDR" "$p" && echo "✓ $p" || echo "✗ $p"
 done
-# Hermes
-grep -q "^# TLDR" ~/.hermes/SOUL.md 2>/dev/null && echo "✓ ~/.hermes/SOUL.md" || echo "✗ ~/.hermes/SOUL.md"
+# Hermes (variant-neutral marker; works even if TLDR is merged below an existing persona header)
+grep -q "target 3 words" ~/.hermes/SOUL.md 2>/dev/null && echo "✓ ~/.hermes/SOUL.md" || echo "✗ ~/.hermes/SOUL.md"
 ```
 
 You should see ✓ for each of the locations you actually installed to.

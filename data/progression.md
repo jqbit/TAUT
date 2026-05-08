@@ -2,6 +2,8 @@
 
 > The version-by-version story of how a single Markdown file went from `−33.9 %` prose-token reduction (v0.1) to a DSPy-optimized cross-model-validated v0.18.0 with a sibling anti-sycophancy variant (`TLDR.blunt.md`). Eighteen iterations across three eras: hand-crafted (v0.1–v0.13.1), empirical ablation (v0.14.3), and **DSPy + cross-model** (v0.15–v0.18). 8,000+ measured agent responses across the full journey.
 
+> **Historical note:** This document tracks the measured evolution through `v0.18.0`. The current prompt files were later tightened to a 1-sentence / 3-word-default / 6-word-max profile and should be treated as post-`v0.18.0` drafts until re-benchmarked.
+
 ## Three eras
 
 | era | versions | method | best metric reported |

@@ -1,5 +1,7 @@
 # TLDR.md benchmarks
 
+> **Historical note:** The benchmark results below were measured on earlier shipped prompt generations. The current `TLDR.md` and `TLDR.blunt.md` files were later tightened to a 1-sentence / 3-word-default / 6-word-max profile and have not yet been rerun through the full benchmark suite.
+
 ## v0.18.0 — DSPy round-2 + 5-agent cross-model validation (2026-05-01)
 
 **Headline (BLUNT variant):** DSPy-style instruction-evolution optimization over 73-72 train probes + cross-model validation across 5 coding-agent CLIs (claude / codex / cursor-agent / gemini / opencode) with **codex as independent judge** (different model family from generator → eliminates self-bias).

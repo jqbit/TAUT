@@ -4,6 +4,8 @@ All TLDR.md prompt versions, with the headline metric (total prose-token reducti
 
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/). Versions are TLDR.md prompt versions; benchmarks are the matching `v1.<N>` bench run.
 
+> **Historical note:** This changelog documents the benchmarked prompt versions through `v0.18.0`. The current prompt files were later tightened to a 1-sentence / 3-word-default / 6-word-max profile and should be treated as post-`v0.18.0` drafts until re-benchmarked.
+
 ## [0.18.0] — 2026-05-01
 
 **`TLDR.blunt.md` — DSPy round-2 + cross-model held-out validation across 5 agents.**
